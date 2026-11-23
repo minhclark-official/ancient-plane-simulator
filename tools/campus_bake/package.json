@@ -1,0 +1,5 @@
+{
+  "name": "campus-bake",
+  "private": true,
+  "dependencies": { "@napi-rs/canvas": "^0.1.0" }
+}

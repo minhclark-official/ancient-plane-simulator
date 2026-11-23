@@ -1,0 +1,48 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/screens/the_end.gd" id="1_end"]
+
+[node name="TheEnd" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_end")
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 0
+offset_top = 150.0
+offset_right = 1600.0
+offset_bottom = 320.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "THE END?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Lines" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 300.0
+offset_top = 360.0
+offset_right = 1300.0
+offset_bottom = 580.0
+theme_override_constants/separation = 14
+
+[node name="FlyAgain" type="Button" parent="."]
+layout_mode = 0
+offset_left = 620.0
+offset_top = 640.0
+offset_right = 980.0
+offset_bottom = 720.0
+focus_mode = 0
+text = "FLY AGAIN"
+
+[node name="MenuBtn" type="Button" parent="."]
+layout_mode = 0
+offset_left = 700.0
+offset_top = 750.0
+offset_right = 900.0
+offset_bottom = 800.0
+focus_mode = 0
+text = "main menu"

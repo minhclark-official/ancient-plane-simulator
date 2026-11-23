@@ -1,0 +1,139 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/screens/pda.gd" id="1_pda"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_body"]
+bg_color = Color(0.16, 0.17, 0.15, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.32, 0.33, 0.29, 1)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_screen"]
+bg_color = Color(0.008, 0.043, 0.027, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.1, 0.4, 0.2, 1)
+
+[node name="PDA" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_pda")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="Body" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 200.0
+offset_top = 50.0
+offset_right = 1400.0
+offset_bottom = 860.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_body")
+
+[node name="Tabs" type="VBoxContainer" parent="Body"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 40.0
+offset_right = 200.0
+offset_bottom = 500.0
+theme_override_constants/separation = 12
+
+[node name="Screen" type="Panel" parent="Body"]
+layout_mode = 0
+offset_left = 230.0
+offset_top = 30.0
+offset_right = 1170.0
+offset_bottom = 780.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_screen")
+
+[node name="Title" type="Label" parent="Body/Screen"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 12.0
+offset_right = 920.0
+offset_bottom = 56.0
+text = "STORAGE"
+
+[node name="List" type="ItemList" parent="Body/Screen"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 64.0
+offset_right = 380.0
+offset_bottom = 600.0
+
+[node name="Pic" type="TextureRect" parent="Body/Screen"]
+layout_mode = 0
+offset_left = 640.0
+offset_top = 64.0
+offset_right = 920.0
+offset_bottom = 400.0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Text" type="Label" parent="Body/Screen"]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 64.0
+offset_right = 630.0
+offset_bottom = 600.0
+text = ""
+autowrap_mode = 3
+
+[node name="Bar" type="HBoxContainer" parent="Body/Screen"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 640.0
+offset_right = 920.0
+offset_bottom = 700.0
+theme_override_constants/separation = 16
+
+[node name="ActA" type="Button" parent="Body/Screen/Bar"]
+visible = false
+custom_minimum_size = Vector2(140, 50)
+layout_mode = 2
+text = "READ"
+
+[node name="ActB" type="Button" parent="Body/Screen/Bar"]
+visible = false
+custom_minimum_size = Vector2(140, 50)
+layout_mode = 2
+text = "DROP"
+
+[node name="Prev" type="Button" parent="Body/Screen/Bar"]
+visible = false
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+text = "<"
+
+[node name="Next" type="Button" parent="Body/Screen/Bar"]
+visible = false
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+text = ">"
+
+[node name="Status" type="Label" parent="Body/Screen"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 710.0
+offset_right = 920.0
+offset_bottom = 740.0
+text = "PW PDA-84"

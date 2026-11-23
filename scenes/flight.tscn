@@ -1,0 +1,488 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/flight.gd" id="1_flight"]
+[ext_resource type="Script" path="res://scripts/world/world_builder.gd" id="2_world"]
+[ext_resource type="Script" path="res://scripts/ui/cockpit_panel.gd" id="3_panel"]
+[ext_resource type="Script" path="res://scripts/ui/instrument.gd" id="4_inst"]
+[ext_resource type="PackedScene" path="res://scenes/pda.tscn" id="5_pda"]
+[ext_resource type="Script" path="res://scripts/ui/hud.gd" id="6_hud"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
+sky_top_color = Color(0.17, 0.38, 0.76, 1)
+sky_horizon_color = Color(0.82, 0.74, 0.62, 1)
+sky_curve = 0.18
+ground_bottom_color = Color(0.7, 0.58, 0.42, 1)
+ground_horizon_color = Color(0.82, 0.68, 0.52, 1)
+ground_curve = 0.05
+sun_angle_max = 18.0
+sun_curve = 0.1
+
+[sub_resource type="Sky" id="Sky_main"]
+sky_material = SubResource("ProceduralSkyMaterial_sky")
+
+[sub_resource type="Environment" id="Environment_main"]
+background_mode = 2
+sky = SubResource("Sky_main")
+ambient_light_source = 3
+ambient_light_color = Color(0.72, 0.82, 1, 1)
+ambient_light_energy = 0.55
+tonemap_mode = 2
+tonemap_white = 6.0
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.9, 0.77, 0.6, 1)
+fog_density = 0.8
+fog_sky_affect = 0.15
+fog_depth_curve = 1.0
+fog_depth_begin = 9000.0
+fog_depth_end = 105000.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_help"]
+content_margin_left = 20.0
+content_margin_top = 5.0
+content_margin_right = 20.0
+content_margin_bottom = 7.0
+bg_color = Color(0.055, 0.039, 0.016, 0.82)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.788, 0.635, 0.29, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dialog"]
+bg_color = Color(0.753, 0.753, 0.753, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.9, 0.9, 0.9, 1)
+
+[node name="Flight" type="Node"]
+script = ExtResource("1_flight")
+
+[node name="WorldView" type="SubViewportContainer" parent="."]
+offset_top = 62.0
+offset_right = 1600.0
+offset_bottom = 414.0
+mouse_filter = 2
+stretch = true
+
+[node name="Viewport" type="SubViewport" parent="WorldView"]
+own_world_3d = true
+handle_input_locally = false
+size = Vector2i(1600, 352)
+render_target_update_mode = 4
+
+[node name="World" type="Node3D" parent="WorldView/Viewport"]
+script = ExtResource("2_world")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="WorldView/Viewport/World"]
+environment = SubResource("Environment_main")
+
+[node name="Sun" type="DirectionalLight3D" parent="WorldView/Viewport/World"]
+light_color = Color(1, 0.886, 0.722, 1)
+light_energy = 1.6
+
+[node name="Camera3D" type="Camera3D" parent="WorldView/Viewport/World"]
+current = true
+fov = 38.0
+near = 1.5
+far = 130000.0
+
+[node name="Cockpit" type="CanvasLayer" parent="."]
+layer = 1
+
+[node name="Panel" type="Control" parent="Cockpit"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_panel")
+
+[node name="ASI" type="Control" parent="Cockpit/Panel" groups=["instruments"]]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 513.0
+offset_right = 206.0
+offset_bottom = 701.0
+mouse_filter = 2
+script = ExtResource("4_inst")
+kind = "asi"
+
+[node name="EADI" type="Control" parent="Cockpit/Panel" groups=["instruments"]]
+layout_mode = 0
+offset_left = 222.0
+offset_top = 500.0
+offset_right = 444.0
+offset_bottom = 706.0
+mouse_filter = 2
+clip_contents = true
+script = ExtResource("4_inst")
+kind = "eadi"
+
+[node name="ALT" type="Control" parent="Cockpit/Panel" groups=["instruments"]]
+layout_mode = 0
+offset_left = 456.0
+offset_top = 513.0
+offset_right = 644.0
+offset_bottom = 701.0
+mouse_filter = 2
+script = ExtResource("4_inst")
+kind = "alt"
+
+[node name="VSI" type="Control" parent="Cockpit/Panel" groups=["instruments"]]
+layout_mode = 0
+offset_left = 658.0
+offset_top = 502.0
+offset_right = 774.0
+offset_bottom = 618.0
+mouse_filter = 2
+script = ExtResource("4_inst")
+kind = "vsi"
+
+[node name="Clock" type="Control" parent="Cockpit/Panel" groups=["instruments"]]
+layout_mode = 0
+offset_left = 674.0
+offset_top = 626.0
+offset_right = 758.0
+offset_bottom = 710.0
+mouse_filter = 2
+script = ExtResource("4_inst")
+kind = "clock"
+
+[node name="ND" type="Control" parent="Cockpit/Panel" groups=["instruments"]]
+layout_mode = 0
+offset_left = 790.0
+offset_top = 500.0
+offset_right = 1022.0
+offset_bottom = 706.0
+mouse_filter = 2
+clip_contents = true
+script = ExtResource("4_inst")
+kind = "nd"
+
+[node name="EICAS" type="Control" parent="Cockpit/Panel" groups=["instruments"]]
+layout_mode = 0
+offset_left = 1036.0
+offset_top = 500.0
+offset_right = 1306.0
+offset_bottom = 706.0
+mouse_filter = 2
+clip_contents = true
+script = ExtResource("4_inst")
+kind = "eicas"
+
+[node name="CDU" type="Control" parent="Cockpit/Panel" groups=["instruments"]]
+layout_mode = 0
+offset_left = 1318.0
+offset_top = 500.0
+offset_right = 1586.0
+offset_bottom = 652.0
+mouse_filter = 2
+clip_contents = true
+script = ExtResource("4_inst")
+kind = "cdu"
+
+[node name="Yoke" type="Control" parent="Cockpit/Panel" groups=["instruments"]]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 724.0
+offset_right = 290.0
+offset_bottom = 892.0
+mouse_filter = 2
+script = ExtResource("4_inst")
+kind = "yoke"
+
+[node name="GearPanel" type="Control" parent="Cockpit/Panel" groups=["instruments"]]
+layout_mode = 0
+offset_left = 300.0
+offset_top = 724.0
+offset_right = 470.0
+offset_bottom = 892.0
+mouse_filter = 2
+script = ExtResource("4_inst")
+kind = "gear"
+
+[node name="Quadrant" type="Control" parent="Cockpit/Panel" groups=["instruments"]]
+layout_mode = 0
+offset_left = 480.0
+offset_top = 724.0
+offset_right = 780.0
+offset_bottom = 892.0
+mouse_filter = 2
+script = ExtResource("4_inst")
+kind = "quad"
+
+[node name="Annunciators" type="Control" parent="Cockpit/Panel" groups=["instruments"]]
+layout_mode = 0
+offset_left = 792.0
+offset_top = 724.0
+offset_right = 1062.0
+offset_bottom = 892.0
+mouse_filter = 2
+script = ExtResource("4_inst")
+kind = "ann"
+
+[node name="Engines" type="Control" parent="Cockpit/Panel" groups=["instruments"]]
+layout_mode = 0
+offset_left = 1072.0
+offset_top = 724.0
+offset_right = 1312.0
+offset_bottom = 892.0
+mouse_filter = 2
+script = ExtResource("4_inst")
+kind = "eng"
+
+[node name="Buttons" type="Control" parent="Cockpit/Panel" groups=["instruments"]]
+layout_mode = 0
+offset_left = 1322.0
+offset_top = 724.0
+offset_right = 1586.0
+offset_bottom = 892.0
+mouse_filter = 2
+script = ExtResource("4_inst")
+kind = "panel"
+
+[node name="MCP" type="Control" parent="Cockpit/Panel" groups=["instruments"]]
+layout_mode = 0
+offset_left = 420.0
+offset_top = 418.0
+offset_right = 1180.0
+offset_bottom = 488.0
+mouse_filter = 2
+script = ExtResource("4_inst")
+kind = "mcp"
+
+[node name="Overlay" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="HelpBar" type="Label" parent="Overlay"]
+offset_left = 295.0
+offset_top = 346.0
+offset_right = 1305.0
+offset_bottom = 404.0
+theme_override_colors/font_color = Color(1, 0.957, 0.816, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_help")
+text = "Welcome aboard Ancient Air 001!"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+mouse_filter = 2
+
+[node name="Caption" type="Label" parent="Overlay"]
+offset_top = 720.0
+offset_right = 1600.0
+offset_bottom = 840.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+horizontal_alignment = 1
+vertical_alignment = 1
+mouse_filter = 2
+
+[node name="SkipHint" type="Label" parent="Overlay"]
+offset_left = 1300.0
+offset_top = 16.0
+offset_right = 1584.0
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(1, 1, 1, 0.6)
+text = "SPACE: skip"
+horizontal_alignment = 2
+mouse_filter = 2
+
+[node name="Flash" type="ColorRect" parent="Overlay"]
+offset_right = 1600.0
+offset_bottom = 900.0
+mouse_filter = 2
+color = Color(1, 1, 1, 1)
+
+[node name="HelpDialog" type="Control" parent="Overlay"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1600.0
+offset_bottom = 900.0
+
+[node name="Dim" type="ColorRect" parent="Overlay/HelpDialog"]
+layout_mode = 0
+offset_right = 1600.0
+offset_bottom = 900.0
+color = Color(0, 0, 0, 0.45)
+
+[node name="Box" type="Panel" parent="Overlay/HelpDialog"]
+layout_mode = 0
+offset_left = 380.0
+offset_top = 130.0
+offset_right = 1220.0
+offset_bottom = 770.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_dialog")
+
+[node name="Title" type="Label" parent="Overlay/HelpDialog/Box"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 10.0
+offset_right = 824.0
+offset_bottom = 44.0
+theme_override_colors/font_color = Color(0.05, 0.05, 0.5, 1)
+text = "CONTROLS.HLP - Ancient Plane Simulator"
+
+[node name="Flying" type="Label" parent="Overlay/HelpDialog/Box"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 60.0
+offset_right = 420.0
+offset_bottom = 380.0
+theme_override_colors/font_color = Color(0.05, 0.05, 0.05, 1)
+text = "FLYING\n\nW S    pitch (or arrows)\nA D    roll\nQ E    rudder\nR F    thrust up / down\nG      landing gear\n[ ]    flaps\nP B    parking / wheel brake"
+
+[node name="Automation" type="Label" parent="Overlay/HelpDialog/Box"]
+layout_mode = 0
+offset_left = 430.0
+offset_top = 60.0
+offset_right = 830.0
+offset_bottom = 380.0
+theme_override_colors/font_color = Color(0.05, 0.05, 0.05, 1)
+text = "AUTOMATION\n\nT      auto take-off\nK      DEST: arm autoland\nJ      switch destination\nV      autopilot on / off\nX      time acceleration\nN      map range\n       autoland engages 5 NM out"
+
+[node name="System" type="Label" parent="Overlay/HelpDialog/Box"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 400.0
+offset_right = 830.0
+offset_bottom = 560.0
+theme_override_colors/font_color = Color(0.05, 0.05, 0.05, 1)
+text = "SYSTEM\n\nSpace / Esc  pause menu     M  mute     H  this dialog\nEverything in the cockpit is clickable. Drag the yoke and levers."
+
+[node name="Tip" type="Label" parent="Overlay/HelpDialog/Box"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 590.0
+offset_right = 600.0
+offset_bottom = 624.0
+theme_override_colors/font_color = Color(0.25, 0.25, 0.25, 1)
+text = "Tip: if something starts to go wrong, that is normal."
+
+[node name="Ok" type="Button" parent="Overlay/HelpDialog/Box"]
+layout_mode = 0
+offset_left = 700.0
+offset_top = 584.0
+offset_right = 820.0
+offset_bottom = 624.0
+focus_mode = 0
+text = "OK"
+
+[node name="Loading" type="Control" parent="Overlay"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1600.0
+offset_bottom = 900.0
+
+[node name="Bg" type="ColorRect" parent="Overlay/Loading"]
+layout_mode = 0
+offset_right = 1600.0
+offset_bottom = 900.0
+color = Color(0, 0, 0, 1)
+
+[node name="Text" type="Label" parent="Overlay/Loading"]
+layout_mode = 0
+offset_top = 400.0
+offset_right = 1600.0
+offset_bottom = 450.0
+theme_override_colors/font_color = Color(0.345, 0.941, 0.541, 1)
+text = "loading map data plane_cockpit"
+horizontal_alignment = 1
+
+[node name="Bar" type="ProgressBar" parent="Overlay/Loading"]
+layout_mode = 0
+offset_left = 500.0
+offset_top = 470.0
+offset_right = 1100.0
+offset_bottom = 490.0
+show_percentage = false
+
+[node name="Hud" type="Control" parent="Cockpit/Panel"]
+clip_contents = true
+layout_mode = 0
+offset_top = 62.0
+offset_right = 1600.0
+offset_bottom = 414.0
+mouse_filter = 2
+script = ExtResource("6_hud")
+
+[node name="Overhead" type="Control" parent="Cockpit/Panel" groups=["instruments"]]
+visible = false
+layout_mode = 0
+offset_left = 300.0
+offset_top = 70.0
+offset_right = 1300.0
+offset_bottom = 408.0
+script = ExtResource("4_inst")
+kind = "overhead"
+
+[node name="StormOv" type="ColorRect" parent="Overlay"]
+offset_top = 62.0
+offset_right = 1600.0
+offset_bottom = 414.0
+mouse_filter = 2
+color = Color(0.85, 0.65, 0.35, 0)
+
+[node name="Shutters" type="Control" parent="Overlay"]
+visible = false
+offset_top = 62.0
+offset_right = 1600.0
+offset_bottom = 414.0
+mouse_filter = 2
+clip_contents = true
+
+[node name="Plate" type="ColorRect" parent="Overlay/Shutters"]
+layout_mode = 0
+offset_right = 1600.0
+offset_bottom = 352.0
+mouse_filter = 2
+color = Color(0.16, 0.17, 0.19, 1)
+
+[node name="SecretMsg" type="Label" parent="Overlay"]
+offset_top = 130.0
+offset_right = 1600.0
+offset_bottom = 330.0
+theme_override_colors/font_color = Color(1, 0.69, 0.19, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+horizontal_alignment = 1
+mouse_filter = 2
+
+[node name="Slap" type="Control" parent="Overlay"]
+visible = false
+offset_left = 650.0
+offset_top = 70.0
+offset_right = 950.0
+offset_bottom = 520.0
+
+[node name="Img" type="TextureRect" parent="Overlay/Slap"]
+layout_mode = 0
+offset_right = 300.0
+offset_bottom = 400.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Keep" type="Label" parent="Overlay/Slap"]
+layout_mode = 0
+offset_top = 404.0
+offset_right = 300.0
+offset_bottom = 440.0
+theme_override_colors/font_color = Color(1, 0.9, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+text = "CLICK TO KEEP"
+horizontal_alignment = 1
+mouse_filter = 2
+
+[node name="PDA" parent="Overlay" instance=ExtResource("5_pda")]
